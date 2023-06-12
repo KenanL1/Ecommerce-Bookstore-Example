@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link crossorigin="anonymous"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+          rel="stylesheet"/>
+    <script defer th:src="@{../js/index.js}" type="module"></script>
+    <title>Bookstore</title>
+</head>
+<body>
+<div th:replace="headerFragment.html"></div>
+<div class="container">
+    <br></br>
+    <fieldset class="form-group border p-3">
+        <legend class="w-auto px-2">Category</legend>
+        <form class="mt-3" id="categoryFilterForm">
+            <div class="form-group">
+                <div class="row ml-3">
+                    <div class="col-sm-auto mr-3" th:each="category, status : ${categories}">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" name="category"
+                                   th:checked="${status.index == 0}" th:value="${category}" type="radio">
+                            <label class="form-check-label p-0" th:text="${category}"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </fieldset>
+    <div class="row justify-content-between">
+        <div class="col-sm-6">
+            <div class="input-group mb-3">
+                <input class="form-control" id="search" name="search" placeholder="Search" type="text">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" id="searchSubmit" name="searchSubmit" type="button">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="result"></div>
+</div>
+</body>
+</html>

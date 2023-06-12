@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link crossorigin="anonymous"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+          rel="stylesheet"/>
+    <script defer th:src="@{../js/bookItem.js}" type="module"></script>
+
+    <title>Book</title>
+</head>
+<body>
+<div th:replace="headerFragment.html"></div>
+
+<div class="container">
+    <div class="books">
+        <div class="card mb-3">
+            <div class="row no-gutters">
+                <div class="col-md-4">
+                    <img class="card-img" th:src="${book.picture_link}" width="20px">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${book.title}"></h5>
+                        <h5 class="card-text">By: <span th:text="${book.author}"></span></h5>
+                        <h5 class="price card-text">Price: $<span th:text="${book.price}"></span></h5>
+                        <h5 class="card-text">Category: <span th:text="${book.category}"></span></h5>
+                        <button class="btn btn-primary" id="addToCart"
+                                th:attr="data-bookid=${book.bid}"
+                                th:text="'Add to Cart'"></button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br></br>
+    <hr></hr>
+    <form>
+        <FIELDSET>
+            <legend>Reviews</legend>
+            <div id="reviews">
+                <textarea class="form-control" cols="50" id="reviewarea" placeholder="Enter Review"
+                          rows="4"></textarea>
+                <input class="form-control" id="ratingarea" placeholder="Enter Rating"></input>
+                <button class="btn btn-secondary float-right" id="submitReview" th:attr="data-bookid=${book.bid}"
+                        type="button">
+                    Submit
+                </button>
+
+            </div>
+            <label>Previous Reviews Section</label>
+            <div class="card" th:each="review : ${reviews}">
+                <div class="container">
+                    <h4>Review: <b th:text="${review.review}"></b></h4>
+                    <h4>Rating: <b th:text="${review.rating}"></b> Stars</h4>
+                </div>
+            </div>
+        </FIELDSET>
+    </form>
+</div>
+</body>
+</html>
