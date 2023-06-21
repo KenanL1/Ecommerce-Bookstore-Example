@@ -20,10 +20,6 @@ public class ApplicationConfig {
     @Autowired
     private UserRepository userRepository;
 
-//    public ApplicationConfig(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
-
     @Bean
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {

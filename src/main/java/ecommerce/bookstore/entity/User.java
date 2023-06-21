@@ -24,14 +24,7 @@ public class User implements UserDetails {
 
     public User() {
     }
-
-    public User(String name, String username, Long addr, String password, boolean isAdmin) {
-        this.name = name;
-        this.username = username;
-        this.addr = addr;
-        this.password = password;
-    }
-
+    
     public User(String name, String username, Long addr, String password, Role role) {
         this.name = name;
         this.username = username;

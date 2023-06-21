@@ -41,6 +41,14 @@ public class Cart {
         return getCartList().size();
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public List<Book> getCartList() {
         return cartList;
     }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/book")
@@ -37,12 +38,18 @@ public class BookAPI {
             return ResponseEntity.ok(bookService.getBooksByTitle(title));
 
         return ResponseEntity.ok(bookService.getAllBooks());
+
     }
 
     // Get the book with the specific bid
     @GetMapping("/{bid}")
     public ResponseEntity<Book> retrieveBook(@PathVariable("bid") String bid) throws Exception {
-        return ResponseEntity.ok(bookService.getByBid(bid).get());
+        Optional<Book> book = bookService.getByBid(bid);
+        if (book.isPresent())
+            return ResponseEntity.ok(book.get());
+        else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // add a new book
@@ -55,11 +62,11 @@ public class BookAPI {
     }
 
     // delete a book
-    @DeleteMapping
-    public ResponseEntity<Map<String, Object>> bookDelete(String bid) {
+    @DeleteMapping("/{bid}")
+    public ResponseEntity<Map<String, Object>> bookDelete(@PathVariable("bid") String bid) {
         bookService.deleteBook(bid);
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Book removed form database");
+        response.put("message", "Book removed from database");
         return ResponseEntity.ok(response);
     }
 

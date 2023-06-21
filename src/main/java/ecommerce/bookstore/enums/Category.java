@@ -4,6 +4,7 @@ public enum Category {
     ALL,
     BIOGRAPHY,
     TEXTBOOK,
+    FICTION,
     FANTASY,
     SCIENCE,
     SCIENCEFICTION,

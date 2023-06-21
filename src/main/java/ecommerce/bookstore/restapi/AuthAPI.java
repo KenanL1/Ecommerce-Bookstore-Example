@@ -33,6 +33,7 @@ public class AuthAPI {
     @Autowired
     private JwtUtils jwtUtils;
 
+    // Register a new user
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         if (userService.getUser(request.getUsername()) != null) {
@@ -42,31 +43,37 @@ public class AuthAPI {
         }
         User user = userService.addUser(request.getName(), request.getUsername(), request.getPassword(), request.getStreet(), request.getProvince(), request.getCountry(), request.getZip());
 
+        // Generate a JWT token for the user
         String token = jwtUtils.generateToken(user);
         AuthResponse response = new AuthResponse(token, user.getId());
         return ResponseEntity.ok(response);
 
     }
 
+    // Authenticate a user and generate a JWT token
     @PostMapping("/login")
     public ResponseEntity<?> login(@org.jetbrains.annotations.NotNull @RequestBody AuthRequest request) {
         try {
+            // Use Spring Security's authentication manager to authenticate the user
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             request.getUsername(), request.getPassword())
             );
 //            SecurityContextHolder.getContext().setAuthentication(authentication);
             User user = (User) authentication.getPrincipal();
-            // User user = userRepository.findByUsername(request.getUsername());
+
+            // Generate a JWT token for the user
             String token = jwtUtils.generateToken(user);
             AuthResponse response = new AuthResponse(token, user.getId());
 
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
+            // Return an error response if authentication fails
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong Credentials");
         }
     }
 
+    // Log out the current user
     @PostMapping("/logout")
     public ResponseEntity<?> logout() {
         // Clear authentication information

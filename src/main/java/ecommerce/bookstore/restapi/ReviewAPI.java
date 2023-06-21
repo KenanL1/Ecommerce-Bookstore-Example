@@ -31,9 +31,9 @@ public class ReviewAPI {
         reviewService.delete(id);
     }
 
-    @DeleteMapping("/book/{bId}")
-    public void deleteAllReviewByBook(@PathVariable("bId") String bId) {
-        reviewService.deleteAllByBook(bId);
+    @DeleteMapping("/book/{bid}")
+    public void deleteAllReviewByBook(@PathVariable("bid") String bid) {
+        reviewService.deleteAllByBook(bid);
     }
 
 }
