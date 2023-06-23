@@ -1,5 +1,6 @@
 package ecommerce.bookstore.config;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,7 +50,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.split(" ")[1].trim();
 
         // extract the username from JWT token
-        username = jwtUtils.extractUsername(jwt);
+        try {
+            username = jwtUtils.extractUsername(jwt);
+        } catch (ExpiredJwtException e) {
+            // Token has expired, log out the user
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setHeader("X-Expired-Token", "true");
+            return;
+        }
 
         // Username is not null and user is not authenticated yet
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -60,9 +68,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-            } else {
-                // Token expired or invalid, send an appropriate response header
-                response.setHeader("X-Expired-Token", "true");
             }
         }
         filterChain.doFilter(request, response);

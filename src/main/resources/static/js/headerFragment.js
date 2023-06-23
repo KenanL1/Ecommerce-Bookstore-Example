@@ -45,12 +45,12 @@ if (loggedIn) {
   loginButton.style.display = 'none';
   logoutButton.style.display = 'block';
   cartButton.style.display = 'block';
+  getCartItemCount();
 } else {
   loginButton.style.display = 'block';
   logoutButton.style.display = 'none';
   cartButton.style.display = 'none';
 }
-getCartItemCount();
 toggleNav.addEventListener('click', toggleNavbar);
 logoutButton.addEventListener('click', async (e) => {
     await logout(e);

@@ -137,7 +137,7 @@ class BookAPITest {
         doNothing().when(bookService).deleteBook(bid);
 
         Map<String, Object> expectedResponse = new HashMap<>();
-        expectedResponse.put("message", "Book removed form database");
+        expectedResponse.put("message", "Book removed from database");
 
         ResponseEntity<Map<String, Object>> response = bookAPI.bookDelete(bid);
 

@@ -3,6 +3,8 @@
 This project is a straightforward example of an e-commerce bookstore web application. It follows a monolithic
 architecture (Java MVC) approach with server-side rendering using Java template engine.
 
+This project is my way of learning Spring Boot, JPA/Hibernate, JUnit, and Thymeleaf.
+
 ## Features
 
 The application offers the following features:
@@ -171,11 +173,11 @@ comprehensive integration testing, and improved test organization.
 
 Please refer to the relevant documentation for more details on implementing testing with JUnit 5, Mockito, and MockMvc.
 
-### Setting Up Postgres DB with Docker
+### Setting Up Postgres DB with Docker Separately
 
 #### Create postgres DB
 
-`docker compose up -d`
+`docker compose up -d -f docker-compose-db.yml`
 
 #### Access postgres DB
 
