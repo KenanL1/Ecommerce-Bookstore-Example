@@ -19,8 +19,9 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Skip test database isn't set up yet
       - name: Build JAR
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml -DskipTests
 
   docker:
     runs-on: ubuntu-latest
