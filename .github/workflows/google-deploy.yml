@@ -19,18 +19,18 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       #
-      #      - name: Install Maven
-      #        run: apt-get update && apt-get install -y maven
+      - name: Install Maven
+        run: apt-get update && apt-get install -y maven
 
       # Skip test database isn't set up yet
       - name: Build JAR
-        run: mvn clean -B package --file pom.xml -DskipTests
+        run: mvn clean install -DskipTests
 
-      - name: Upload JAR as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: bookstore-jar
-          path: bookstore-0.0.1-SNAPSHOT.jar
+  #      - name: Upload JAR as artifact
+  #        uses: actions/upload-artifact@v2
+  #        with:
+  #          name: bookstore-jar
+  #          path: /target/*.jar
 
   docker:
     runs-on: ubuntu-latest
