@@ -24,7 +24,7 @@ jobs:
 
       # Skip test database isn't set up yet
       - name: Build JAR
-        run: mvn -B package --file pom.xml -DskipTests
+        run: mvn clean -B package --file pom.xml -DskipTests
 
   docker:
     runs-on: ubuntu-latest
@@ -34,12 +34,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      #      - name: Copy JAR to build context
-      #        uses: actions/upload-artifact@v2
-      #        with:
-      #          name: bookstore-jar
-      #          path: target/bookstore-0.0.1-SNAPSHOT.jar
 
       - name: Build Docker image
         run: docker build -t bookstore .
