@@ -54,7 +54,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: KenanL1/Ecommerce-Bookstore-Example:latest
+          tags: kenanl1/ecommerce-bookstore-example:latest
 
         #  deploy:
         #    runs-on: ubuntu-latest
