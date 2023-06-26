@@ -7,6 +7,11 @@ on:
 
 jobs:
   build:
+    # Add 'id-token' with the intended permissions for workload identity federation
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     runs-on: ubuntu-latest
 
     steps:
