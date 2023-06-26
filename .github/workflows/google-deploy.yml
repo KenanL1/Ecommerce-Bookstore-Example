@@ -61,7 +61,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Push Docker image
-        run: docker push bookstore
+        run: docker push kenanl1/bookstore:latest
 
 
         #  deploy:
@@ -81,7 +81,7 @@ jobs:
         uses: google-github-actions/deploy-cloudrun@v0
         with:
           service: ${{ secrets.SERVICE }}
-          image: bookstore
+          image: kenanl1/bookstore:latest
 
       # If required, use the Cloud Run url output in later steps
       - name: Show Output
