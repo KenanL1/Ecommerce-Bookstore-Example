@@ -19,8 +19,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       #
-      #      - name: Install Maven
-      #        run: apt-get update && apt-get install -y maven
+      - name: Install Maven
+        run: apt-get update && apt-get install -y maven
 
       # Skip test database isn't set up yet
       - name: Build JAR
@@ -46,15 +46,9 @@ jobs:
       #      - name: Checkout code
       #        uses: actions/checkout@v2
 
-      #      - name: Build Docker image
-      #        run: docker build -t bookstore --build-arg JAR_PATH=${{ steps.find-jar.outputs.jar-path }} .
+      - name: Build Docker image
+        run: docker build -t bookstore --build-arg JAR_PATH=${{ steps.find-jar.outputs.jar-path }} .
 
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: kenanl1/ecommerce-bookstore-example:latest
 
         #  deploy:
         #    runs-on: ubuntu-latest
