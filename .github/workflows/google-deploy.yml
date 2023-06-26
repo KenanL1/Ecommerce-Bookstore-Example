@@ -19,8 +19,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       #
-      - name: Install Maven
-        run: apt-get update && apt-get install -y maven
+      #      - name: Install Maven
+      #        run: apt-get update && apt-get install -y maven
 
       # Skip test database isn't set up yet
       - name: Build JAR
