@@ -35,3 +35,4 @@ build/
 ### ENV FILE ###
 .env
 /bookstore-390801-c528b7677917.json
+/application_default_credentials.json

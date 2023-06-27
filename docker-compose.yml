@@ -1,33 +1,62 @@
 services:
-  db:
-    container_name: postgres-db
-    image: postgres:alpine
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: postgres
-      PGDATA: /data/postgres
-    volumes:
-      - db:/data/postgres
-    ports:
-      - "5432:5432"
-    networks:
-      - bookstore
-    restart: unless-stopped
+  #  db:
+  #    container_name: postgres-db
+  #    image: postgres:alpine
+  #    environment:
+  #      POSTGRES_USER: postgres
+  #      POSTGRES_PASSWORD: postgres
+  #      POSTGRES_DB: postgres
+  #      PGDATA: /data/postgres
+  #    volumes:
+  #      - db:/data/postgres
+  #    ports:
+  #      - "5432:5432"
+  #    networks:
+  #      - bookstore
+  #    restart: unless-stopped
+  #  sql_proxy:
+  #    container_name: sql_proxy
+  #    image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
+  #    command:
+  #      - "/cloud_sql_proxy"
+  #      - "-dir=/cloudsql"
+  #      - "-instances=$bookstore-390801:us-central1:bookstore-db"
+  #      - "-credential_file=/tmp/keys/keyfile.json"
+  #    # Allow the container to bind to the unix socket.
+  #    ports:
+  #      - "5432:5432"
+  #    networks:
+  #      - bookstore
+  #    volumes:
+  #      - cloudsql:/cloudsql
+
   app:
     container_name: bookstore
-    image: bookstore
-    build: .
+    image: kenanl1/bookstore  # Specify the desired repository name
+    build:
+      context: .
+      dockerfile: Dockerfile
     networks:
       - bookstore
     ports:
       - "8080:8080"
-    depends_on:
-      - db
+    #    depends_on:
+    #      - sql_proxy
     env_file:
       - .env
+    #    volumes:
+    #      - ./bookstore-390801-c528b7677917.json:/bookstore-390801-c528b7677917.json
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      #      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres
+      #      SPRING_DATASOURCE_URL: jdbc:postgresql://34.122.76.40/postgres
+      SPRING_DATASOURCE_URL: jdbc:postgresql:///postgres?cloudSqlInstance=bookstore-390801:us-central1:bookstore-db&socketFactory=com.google.cloud.sql.postgres.SocketFactory&user=postgres&password=postgres
+      #      SPRING_DATASOURCE_URL: jdbc:postgresql:///postgres?cloudSqlInstance=bookstore-390801:us-central1:bookstore-db&socketFactory=com.google.cloud.sql.postgres.SocketFactory
+      SPRING_CLOUD_GCP_SQL_DATABASE_NAME: postgres
+      SPRING_CLOUD_GCP_SQL_INSTANCE_CONNECTION_NAME: bookstore-390801:us-central1:bookstore-db
+      #      SPRING_CLOUD_GCP_SQL_CREDENTIALS_LOCATION: file:/bookstore-390801-c528b7677917.json
+      #      GOOGLE_APPLICATION_CREDENTIALS: /bookstore-390801-c528b7677917.json
+
+      #      SPRING_CLOUD_GCP_SQL_CREDENTIALS_LOCATION: file:/application_default_credentials.json
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
 
@@ -37,3 +66,5 @@ networks:
 
 volumes:
   db:
+  cloudsql:
+  bookstore-390801-c528b7677917.json:

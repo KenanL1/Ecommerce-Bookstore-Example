@@ -1,5 +1,13 @@
 import {makeRequest} from './utils.js'
 
+// Check if user is authenticated
+const isLoggedIn = () => {
+    // Retrieve the jwt from local storage
+    const token = localStorage.getItem('jwtToken');
+    const loggedIn = !!token; // Check if the token exists
+    return loggedIn;
+};
+
 // add a review for the book
 const submitReview = async (bid) => {
 	const review = document.getElementById("reviewarea").value;
