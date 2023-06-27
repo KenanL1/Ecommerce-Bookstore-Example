@@ -50,10 +50,10 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker bookstore image
-        run: docker build --build-arg SECRET_KEY=$SECRET_KEY -t kenanl1/bookstore:latest .
+        run: docker build --build-arg JWT_SECRET_KEY=$JWT_SECRET_KEY -t kenanl1/bookstore:latest .
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+
       - name: Push Docker image
         run: docker push kenanl1/bookstore:latest
 
