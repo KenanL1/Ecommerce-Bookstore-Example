@@ -60,11 +60,11 @@ jobs:
       - name: Build Docker bookstore image
         run: docker build -t kenanl1/bookstore:latest .
 
-      - name: Build Docker Compose
-        run: docker-compose build
+      #      - name: Build Docker Compose
+      #        run: docker-compose build
 
       - name: Push Docker image
-        run: docker-compose push
+        run: docker push kenanl1/bookstore:latest
 
         #  deploy:
         #    runs-on: ubuntu-latest
