@@ -50,9 +50,11 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build Docker bookstore image
-        run: docker build --build-arg JWT_SECRET_KEY=$JWT_SECRET_KEY -t kenanl1/bookstore:latest .
-        env:
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+        run: docker build --build-arg JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+          --build-arg POSTGRES_DATABASE=${{ secrets.POSTGRES_DATABASE }} \
+          --build-arg POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+          --build-arg POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
+          -t kenanl1/bookstore:latest .
 
       - name: Push Docker image
         run: docker push kenanl1/bookstore:latest
