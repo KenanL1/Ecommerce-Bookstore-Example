@@ -4,6 +4,7 @@ This project is a straightforward example of an e-commerce bookstore web applica
 architecture (Java MVC) approach with server-side rendering using Java template engine.
 
 This project is my way of learning Spring Boot, JPA/Hibernate, JUnit, and Thymeleaf.
+[Demo](https://ecommerce-bookstore-example-wl7zjvjaga-uc.a.run.app/)
 
 ## Features
 
@@ -177,7 +178,7 @@ Please refer to the relevant documentation for more details on implementing test
 
 #### Create postgres DB
 
-`docker compose up -d -f docker-compose-db.yml`
+`docker-compose -f docker-compose-db.yml up -d`
 
 #### Access postgres DB
 

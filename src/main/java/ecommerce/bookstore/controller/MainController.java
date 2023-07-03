@@ -42,4 +42,9 @@ public class MainController {
     public String login(Model model) {
         return "login";
     }
+
+    @GetMapping("/checkout")
+    public String checkout(Model model) {
+        return "checkout";
+    }
 }

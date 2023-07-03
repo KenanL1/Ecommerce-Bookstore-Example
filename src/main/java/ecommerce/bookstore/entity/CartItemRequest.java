@@ -4,6 +4,7 @@ public class CartItemRequest {
 
     private Long userId;
     private String bookId;
+    private int quantity;
 
     public CartItemRequest() {
     }
@@ -11,6 +12,12 @@ public class CartItemRequest {
     public CartItemRequest(String bookId, Long userId) {
         this.bookId = bookId;
         this.userId = userId;
+    }
+
+    public CartItemRequest(Long userId, String bookId, int quantity) {
+        this.userId = userId;
+        this.bookId = bookId;
+        this.quantity = quantity;
     }
 
     public Long getUserId() {
@@ -27,5 +34,13 @@ public class CartItemRequest {
 
     public void setBookId(String bookId) {
         this.bookId = bookId;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

@@ -27,7 +27,7 @@ public class SecurityConfig {
                         csrf().disable()
                 // Set permissions on endpoints
                 .authorizeHttpRequests()
-                .requestMatchers("/api/v1/auth/**", "/api/v1/book/**", "/api/v1/review/**", "/api/v1/cart/**", "js/*", "/login", "/signup", "/cart", "/book/*", "/")
+                .requestMatchers("/api/v1/auth/**", "/api/v1/book/**", "/api/v1/review/**", "/api/v1/cart/**", "favicon.ico", "js/*", "/login", "/signup", "/cart", "/checkout", "/book/*", "/")
                 .permitAll() //The request requires no autorization and is a public endpoint; note that in this case, the Authentication is never retrieved from the session
                 .requestMatchers("/admin").hasRole(Role.ADMIN.name())
                 .anyRequest().authenticated()

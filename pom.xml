@@ -105,17 +105,7 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
-        <!--        <dependency>-->
-        <!--            <groupId>com.google.cloud</groupId>-->
-        <!--            <artifactId>spring-cloud-gcp-starter</artifactId>-->
-        <!--            <version>4.5.0</version>-->
-        <!--        </dependency>-->
-        <!-- Add CloudSQL Starter for PostgresSQL -->
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>spring-cloud-gcp-starter-sql-postgresql</artifactId>
-            <version>4.5.0</version>
-        </dependency>
+   
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>

@@ -16,6 +16,7 @@ const removeBook = async (bookId) => {
     location.reload();
 };
 
+// Clear cart
 const clearCart = async () => {
     const userId = getAuthenticatedUser();
     const data = await makeRequest(`../api/v1/cart/${userId}/clearCart`, 'DELETE', {});
@@ -30,12 +31,20 @@ const getBooks = async () => {
     var totalPrice = data.totalOrderPrice;
     var html = ""
 
-    Object.values(data.cartList).forEach(book => {
-//        totalPrice += book.price;
+    const handleQuantityChange = async (e, item) => {
+        e.preventDefault();
+        const totalPriceText = document.getElementById("totalPrice");
+        totalPrice = Number(totalPriceText.textContent) - item.totalPrice + (item.book.price * e.target.value);
+        const data = await makeRequest(`../api/v1/cart/updateQuantity`, 'POST', {userId, bookId: item.book.bid, quantity: e.target.value});
+        totalPriceText.textContent = totalPrice;
+    }
+
+    Object.values(data.cartList).forEach(item => {
         html += `<tr class="book">
-                     <td>${book.title}</td>
-                     <td>${book.author}</td>
-                     <td>${book.price}</td>
+                     <td><a href="./book/${item.book.bid}">${item.book.title}</a></td>
+                     <td>${item.book.author}</td>
+                     <td>${item.book.price}</td>
+                     <td><input class="itemQuantity" value="${item.quantity}"></td>
                      <td>
                          <button class="btn btn-danger btn-sm removeBook"">
                              Remove
@@ -50,16 +59,15 @@ const getBooks = async () => {
     totalPriceText.textContent = totalPrice;
 
     // Attach event listeners to the newly created elements
-    const bookCards = document.getElementsByClassName('book');
-    for (let i = 0; i < bookCards.length; i++) {
-      const bid = data.cartList[i].bid;
-      bookCards[i].addEventListener('click', () => {
-        window.location.href = "./book/" + bid;
+    const itemQuantityInp = document.getElementsByClassName('itemQuantity');
+    for (let i = 0; i < itemQuantityInp.length; i++) {
+      itemQuantityInp[i].addEventListener('change', (e) => {
+        handleQuantityChange(e, data.cartList[i])
       });
     }
     const removeBookBtn = document.getElementsByClassName("removeBook");
     for (let i = 0; i < removeBookBtn.length; i++) {
-        const bid = data.cartList[i].bid;
+        const bid = data.cartList[i].book.bid;
         removeBookBtn[i].addEventListener("click", (e) => {
             e.preventDefault();
             e.stopPropagation();

@@ -19,9 +19,9 @@ public class Cart {
     private User user;
     @JsonManagedReference
     @OneToMany(fetch = FetchType.LAZY)
-    private List<Book> cartList = new ArrayList<Book>();
+    private List<CartItems> cartList = new ArrayList<CartItems>();
 
-    public Cart(User user, List<Book> cartList) {
+    public Cart(User user, List<CartItems> cartList) {
         this.user = user;
         this.cartList = cartList;
     }
@@ -40,8 +40,8 @@ public class Cart {
     @Transient
     public Double getTotalOrderPrice() {
         double sum = 0.0;
-        for (Book b : getCartList()) {
-            sum += b.getPrice();
+        for (CartItems b : getCartList()) {
+            sum += b.getTotalPrice();
         }
         return sum;
     }
@@ -59,11 +59,11 @@ public class Cart {
         this.user = user;
     }
 
-    public List<Book> getCartList() {
+    public List<CartItems> getCartList() {
         return cartList;
     }
 
-    public void setCartList(List<Book> orderList) {
+    public void setCartList(List<CartItems> orderList) {
         this.cartList = orderList;
     }
 }

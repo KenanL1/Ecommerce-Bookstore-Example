@@ -53,33 +53,6 @@ const updateBooks = (books) => {
           });
         }
 	}
-	addToCart();
-};
-
-
-// add the book to the cart if button pressed
-const addToCart = () => {
-	var addBtn = document.getElementsByClassName("addToCart");
-	var counter = document.getElementById("counter");
-	var request = new XMLHttpRequest();
-	var data;
-	for (var i = 0; i < addBtn.length; i++) {
-		addBtn[i].addEventListener("click", (e)=> {
-			var bid = e.target.parentNode.parentNode.querySelector("span").innerHTML;
-			var price = e.target.parentNode.getElementsByClassName("price")[0].innerHTML;
-			data = "cart=" +bid;
-			//need to refresh cart counter
-			request.open("GET", ("./main" + "?" + data), true);
-			request.onreadystatechange = () => {
-				if ((request.readyState == 4) && (request.status == 200)){
-					console.log("added to cart");
-					counter.innerHTML = parseInt(counter.innerHTML) + 1;
-					//console.log(request.responseText);
-				}
-			};
-			request.send();
-		});
-	};
 };
 
 const goToBookPage = (bid) => {

@@ -15,7 +15,7 @@ public interface BookRepository extends JpaRepository<Book, String> {
 
     List<Book> findByCategory(Category category);
 
-    @Query(value = "SELECT * FROM book where UPPER(title) LIKE UPPER('%Heart%')", nativeQuery = true)
+    @Query(value = "SELECT * FROM book where UPPER(title) LIKE CONCAT('%', UPPER(:title), '%')", nativeQuery = true)
     List<Book> findByTitle(@Param("title") String title);
 
 }

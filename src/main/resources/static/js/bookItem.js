@@ -20,11 +20,24 @@ const submitReview = async (bid) => {
 }
 
 // Function to update the cart item count
-const updateCartItemCount = () => {
+const updateCartItemCount = (remove) => {
     const cartItemCountElement = document.getElementById("cartItemCount");
     if (cartItemCountElement) {
-        cartItemCountElement.textContent = Number(cartItemCountElement.textContent) + 1;
+        if (remove)
+            cartItemCountElement.textContent = Number(cartItemCountElement.textContent) - 1;
+        else
+            cartItemCountElement.textContent = Number(cartItemCountElement.textContent) + 1;
     }
+}
+
+const checkItemInCart = async (bookId) => {
+    // Retrieve the user data from local storage
+    const userId = localStorage.getItem('userData');
+
+    const data = await makeRequest(`../api/v1/cart/${userId}/${bookId}`, 'GET')
+    if (data)
+        addToCartBtn.setAttribute("data-in-cart", "true");
+    addToCartBtn.textContent = data ? "Remove from Cart" : "Add to Cart";
 }
 
 const addToCart = async (bookId) => {
@@ -35,12 +48,31 @@ const addToCart = async (bookId) => {
     updateCartItemCount();
 }
 
+const removeFromCart = async (bookId) => {
+    // Retrieve the user data from local storage
+    const userId = localStorage.getItem('userData');
+
+    const data = await makeRequest("../api/v1/cart/removeBook", 'DELETE', {userId, bookId});
+    updateCartItemCount(true);
+}
+
 document.getElementById("submitReview").addEventListener("click", (e) => {
       const bookId = e.target.getAttribute("data-bookid");
       submitReview(bookId);
 })
-
-document.getElementById("addToCart").addEventListener("click", (e) => {
+const addToCartBtn = document.getElementById("addToCart");
+addToCartBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    addToCart(e.target.getAttribute("data-bookid"));
+    const bookId = addToCartBtn.getAttribute("data-bookid");
+    const inCart = addToCartBtn.hasAttribute("data-in-cart");
+    if (inCart) {
+        removeFromCart(bookId);
+        addToCartBtn.removeAttribute("data-in-cart");
+    }
+    else {
+        addToCart(bookId);
+        addToCartBtn.setAttribute("data-in-cart", "true");
+    }
+    addToCartBtn.textContent = !inCart ? "Remove from Cart" : "Add to Cart";
 })
+checkItemInCart(addToCartBtn.getAttribute("data-bookid"));

@@ -12,6 +12,8 @@ ENV POSTGRES_USER=$POSTGRES_USER
 ARG POSTGRES_PASSWORD
 ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
+ENV JAVA_TOOL_OPTIONS -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+
 # Copy the JAR file into the container
 COPY target/bookstore-0.0.1-SNAPSHOT.jar bookstore.jar
 

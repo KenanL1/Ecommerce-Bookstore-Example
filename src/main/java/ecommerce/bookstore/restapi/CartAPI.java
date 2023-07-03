@@ -33,6 +33,21 @@ public class CartAPI {
         return ResponseEntity.ok(cart);
     }
 
+    // Update Item quantity
+    @PostMapping("/updateQuantity")
+    public ResponseEntity<?> updateQuantity(@RequestBody CartItemRequest request) {
+        cartService.updateBookQuantity(request.getBookId(), request.getUserId(), request.getQuantity());
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Quantity updated");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{userId}/{bookId}")
+    public ResponseEntity<?> checkBookInCart(@PathVariable("userId") Long userId, @PathVariable("bookId") String bookId) {
+        boolean bookInCart = cartService.checkBookInCart(bookId, userId);
+        return ResponseEntity.ok(bookInCart);
+    }
+
     // Get number of books in cart
     @GetMapping("/{userId}/cartCount")
     public ResponseEntity<?> getCartItemCount(@PathVariable("userId") long userId) {

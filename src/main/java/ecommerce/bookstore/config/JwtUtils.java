@@ -85,10 +85,11 @@ public class JwtUtils {
     // Get Sign in key from private key
     private PrivateKey getSignInKey() {
         try {
-            byte[] keyBytes = Base64.getDecoder().decode(SECRET_KEY
+            String secretKey = SECRET_KEY
                     .replaceAll("\\n", "")
                     .replace("-----BEGIN PRIVATE KEY-----", "")
-                    .replace("-----END PRIVATE KEY-----", ""));
+                    .replace("-----END PRIVATE KEY-----", "");
+            byte[] keyBytes = Base64.getDecoder().decode(secretKey);
             PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
 
