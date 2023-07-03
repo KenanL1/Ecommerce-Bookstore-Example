@@ -1,9 +1,6 @@
 package ecommerce.bookstore.unittest;
 
-import ecommerce.bookstore.entity.Book;
-import ecommerce.bookstore.entity.Cart;
-import ecommerce.bookstore.entity.CartItemRequest;
-import ecommerce.bookstore.entity.User;
+import ecommerce.bookstore.entity.*;
 import ecommerce.bookstore.enums.Category;
 import ecommerce.bookstore.restapi.CartAPI;
 import ecommerce.bookstore.service.CartService;
@@ -81,9 +78,9 @@ public class CartAPITest {
         Book book1 = new Book("1", "Book 1", 10.1, Category.CHILDREN, "Author 1", "http://testsite");
         Book book2 = new Book("2", "Book 2", 10.2, Category.CHILDREN, "Author 2", "http://testsite");
 
-        List<Book> cartList = new ArrayList<>();
-        cartList.add(book1);
-        cartList.add(book2);
+        List<CartItems> cartList = new ArrayList<>();
+        cartList.add(new CartItems(book1, 1));
+        cartList.add(new CartItems(book2, 1));
 
         Cart cart = new Cart();
         User user = new User();
