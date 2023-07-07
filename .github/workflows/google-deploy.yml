@@ -25,7 +25,7 @@ jobs:
         with:
           workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
           service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
-          
+
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
@@ -43,13 +43,16 @@ jobs:
           export POSTGRES_DATABASE="$POSTGRES_DATABASE"
           export POSTGRES_USER="$POSTGRES_USER"
           export POSTGRES_PASSWORD="$POSTGRES_PASSWORD"
-          mvn clean package -Pcoverage
+          mvn clean package -Pcoverage -Dmaven.test.failure.ignore=true
 
-      - name: Publish test reports
-        uses: actions/upload-artifact@v2
+      - name: Report
+        uses: dorny/test-reporter@v1
+        if: always()
         with:
-          name: Test Reports
-          path: target/surefire-reports/
+          name: Maven Tests
+          path: target/surefire-reports/*.xml
+          reporter: java-junit
+          fail-on-error: true
 
       - name: Publish code coverage reports
         uses: actions/upload-artifact@v2
