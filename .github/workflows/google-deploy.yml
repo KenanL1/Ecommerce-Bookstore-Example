@@ -37,7 +37,12 @@ jobs:
           POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE }}
           POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        run: mvn clean package -Pcoverage -DJWT_SECRET_KEY=$JWT_SECRET_KEY -DPOSTGRES_DATABASE=$POSTGRES_DATABASE -DPOSTGRES_USER=$POSTGRES_USER -DPOSTGRES_PASSWORD=$POSTGRES_PASSWORD
+        run: |
+          export JWT_SECRET_KEY="$JWT_SECRET_KEY"
+          export POSTGRES_DATABASE="$POSTGRES_DATABASE"
+          export POSTGRES_USER="$POSTGRES_USER"
+          export POSTGRES_PASSWORD="$POSTGRES_PASSWORD"
+          mvn clean package -Pcoverage
 
       - name: Publish test reports
         uses: actions/upload-artifact@v2
