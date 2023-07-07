@@ -11,6 +11,7 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
+      issues: 'write'
     environment: .env
     runs-on: ubuntu-latest
 
@@ -45,9 +46,9 @@ jobs:
           export POSTGRES_PASSWORD="$POSTGRES_PASSWORD"
           mvn clean package -Pcoverage -Dmaven.test.failure.ignore=true
 
-      - name: Report
+      - name: Test Report
         uses: dorny/test-reporter@v1
-        if: always()
+        if: success() || failure()    # run this step even if previous step failed
         with:
           name: Maven Tests
           path: target/surefire-reports/*.xml
