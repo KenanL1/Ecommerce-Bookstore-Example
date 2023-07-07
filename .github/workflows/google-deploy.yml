@@ -15,6 +15,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v0'
+        with:
+          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -24,9 +31,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Skip test database isn't set up yet
       - name: Build JAR
-        run: mvn clean package -Pcoverage
+        env:
+          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
+          POSTGRES_DATABASE: ${{ secrets.POSTGRES_DATABASE }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        run: mvn clean package -Pcoverage -DJWT_SECRET_KEY=$JWT_SECRET_KEY -DPOSTGRES_DATABASE=$POSTGRES_DATABASE -DPOSTGRES_USER=$POSTGRES_USER -DPOSTGRES_PASSWORD=$POSTGRES_PASSWORD
 
       - name: Publish test reports
         uses: actions/upload-artifact@v2
@@ -40,20 +51,20 @@ jobs:
           name: Code Coverage Reports
           path: target/site/jacoco/
 
-      #      - name: Upload JAR as artifact
-      #        uses: actions/upload-artifact@v2
-      #        with:
-      #          name: bookstore-jar
-      #          path: /target/*.jar
+          #      - name: Upload JAR as artifact
+          #        uses: actions/upload-artifact@v2
+          #        with:
+          #          name: bookstore-jar
+          #          path: /target/*.jar
 
-      #  docker:
-      #    runs-on: ubuntu-latest
-      #
-      #    needs: build
-      #
-      #    steps:
-      #      - name: Checkout code
-      #        uses: actions/checkout@v2
+          #  docker:
+          #    runs-on: ubuntu-latest
+          #
+        #    needs: build
+        #
+        #    steps:
+        #      - name: Checkout code
+        #        uses: actions/checkout@v2
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -77,13 +88,6 @@ jobs:
         #    runs-on: ubuntu-latest
         #
         #    needs: docker
-
-      - name: Google Auth
-        id: auth
-        uses: 'google-github-actions/auth@v0'
-        with:
-          workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
-          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
 
       - name: Deploy to Cloud Run
         id: deploy
