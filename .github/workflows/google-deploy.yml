@@ -26,7 +26,19 @@ jobs:
 
       # Skip test database isn't set up yet
       - name: Build JAR
-        run: mvn clean package -DskipTests
+        run: mvn clean package -Pcoverage
+
+      - name: Publish test reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: Test Reports
+          path: target/surefire-reports/
+
+      - name: Publish code coverage reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: Code Coverage Reports
+          path: target/site/jacoco/
 
       #      - name: Upload JAR as artifact
       #        uses: actions/upload-artifact@v2
