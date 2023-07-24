@@ -83,7 +83,7 @@ const currentPage = getCurrentPageFromURL();
 if (currentPage === 0) {
   prevBtn.classList.add('disabled');
 }
-if (currentPage === nextBtn.getAttribute("data-last-page") - 1 || nextPage === 0) {
+if (currentPage === nextBtn.getAttribute("data-last-page") - 1 || nextBtn.getAttribute("data-last-page") === 0) {
     nextBtn.classList.add('disabled');
 }
 prevBtn.addEventListener('click', function (e) {
@@ -93,7 +93,7 @@ prevBtn.addEventListener('click', function (e) {
     if (prevPage === 0) {
       prevBtn.classList.add('disabled');
     }
-    if (nextPage !== nextBtn.getAttribute("data-last-page") - 1 || nextPage === 0) {
+    if (nextPage !== nextBtn.getAttribute("data-last-page") - 1 || nextBtn.getAttribute("data-last-page") === 0) {
         nextBtn.classList.remove('disabled');
     }
     updateURLParam('page', prevPage);
@@ -105,7 +105,7 @@ nextBtn.addEventListener('click', function (e) {
     if (prevPage === 0) {
       prevBtn.classList.remove('disabled');
     }
-    if (nextPage === nextBtn.getAttribute("data-last-page") - 1 || nextPage === 0) {
+    if (nextPage === nextBtn.getAttribute("data-last-page") - 1 || nextBtn.getAttribute("data-last-page") === 0) {
         nextBtn.classList.add('disabled');
     }
     updateURLParam('page', nextPage);
