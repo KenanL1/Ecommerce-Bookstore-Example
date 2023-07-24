@@ -18,7 +18,7 @@ import java.util.Optional;
 @Transactional
 public class BookService {
 
-    private static final Logger logger = LoggerFactory.getLogger(ReviewService.class);
+    private static final Logger logger = LoggerFactory.getLogger(BookService.class);
 
     @Autowired
     private BookRepository bookRepository;
@@ -50,7 +50,7 @@ public class BookService {
         return getBookByCategory(category, 0, 50, "desc", "bid");
     }
 
-    // Return list of books where category is input
+    // Return list of books by category
     public Page<Book> getBookByCategory(Category category, int page, int size,
                                         String sortDir, String sortBy) {
         try {
@@ -73,7 +73,7 @@ public class BookService {
         return getBooksByTitle(title, 0, 50, "desc", "bid");
     }
 
-    //return book where title is like input value
+    // Return book by title
     public Page<Book> getBooksByTitle(String title, int page, int size,
                                       String sortDir, String sortBy) {
         try {
@@ -96,6 +96,7 @@ public class BookService {
         return getBooksByCategoryAndTitle(category, title, 0, 50, "desc", "bid");
     }
 
+    // Return book by category and title
     public Page<Book> getBooksByCategoryAndTitle(Category category, String title, int page, int size,
                                                  String sortDir, String sortBy) {
         try {
@@ -122,13 +123,23 @@ public class BookService {
 
     //Insert book into db
     public Book insert(String bid, String title, double price, Category category, String author, String picture_link) {
-        Book book = new Book(bid, title, price, category, author, picture_link);
-        return bookRepository.save(book);
+        try {
+            Book book = new Book(bid, title, price, category, author, picture_link);
+            return bookRepository.save(book);
+        } catch (Exception e) {
+            logger.error("Error inserting book", e);
+            throw e;
+        }
     }
 
     //Delete a book
     public void deleteBook(String bid) {
-        bookRepository.deleteById(bid);
+        try {
+            bookRepository.deleteById(bid);
+        } catch (Exception e) {
+            logger.error("Error deleting book", e);
+            throw e;
+        }
     }
 
 

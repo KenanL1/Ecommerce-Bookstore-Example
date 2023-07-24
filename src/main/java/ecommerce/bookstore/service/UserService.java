@@ -8,6 +8,8 @@ import ecommerce.bookstore.enums.Role;
 import ecommerce.bookstore.repository.AddressRepository;
 import ecommerce.bookstore.repository.CartRepository;
 import ecommerce.bookstore.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -45,20 +49,35 @@ public class UserService {
 
     /* Create a new user with address linked */
     public User addUser(String name, String username, String password, String street, String province, String country, String zip) {
-        Long addrId = addAddress(street, province, country, zip);
-        User u = new User(name, username, addrId, passwordEncoder.encode(password), Role.USER);
-        cartRepository.save(new Cart(u, new ArrayList<CartItems>()));
-        return userRepository.save(u);
+        try {
+            Long addrId = addAddress(street, province, country, zip);
+            User u = new User(name, username, addrId, passwordEncoder.encode(password), Role.USER);
+            cartRepository.save(new Cart(u, new ArrayList<CartItems>()));
+            return userRepository.save(u);
+        } catch (Exception e) {
+            logger.error("Error creating new user", e);
+            throw e;
+        }
     }
 
     // Create a new admin
     public User addAdmin(String username, String name, Long addr, String password) {
-        User u = new User(name, username, addr, password, Role.ADMIN);
-        return userRepository.save(u);
+        try {
+            User u = new User(name, username, addr, password, Role.ADMIN);
+            return userRepository.save(u);
+        } catch (Exception e) {
+            logger.error("Error creating new admin");
+            throw e;
+        }
     }
 
     //Get a user based off username
     public User getUser(String userName) {
-        return userRepository.findByUsername(userName);
+        try {
+            return userRepository.findByUsername(userName);
+        } catch (Exception e) {
+            logger.error("Error getting user");
+            throw e;
+        }
     }
 }

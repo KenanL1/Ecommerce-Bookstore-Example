@@ -27,6 +27,7 @@ const makeRequest = async (url, method, body) => {
       if (expiredTokenHeader === 'true') {
         localStorage.removeItem('jwtToken');
         localStorage.removeItem('userData')
+        location.reload();
       }
 
       // Request was successful

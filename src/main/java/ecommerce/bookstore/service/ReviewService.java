@@ -59,12 +59,22 @@ public class ReviewService {
 
     // Delete a review by review id
     public void delete(Long id) {
-        reviewRepository.deleteById(id);
+        try {
+            reviewRepository.deleteById(id);
+        } catch (Exception e) {
+            logger.error("Error deleting review", e);
+            throw e;
+        }
     }
 
     // Delete all review of a book id
     public void deleteAllByBook(String bid) {
-        reviewRepository.deleteAllByBook(bid);
+        try {
+            reviewRepository.deleteAllByBook(bid);
+        } catch (Exception e) {
+            logger.error("Error deleting all review associated with book", e);
+            throw e;
+        }
     }
 
     // Gets most reviewed books

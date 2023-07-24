@@ -37,10 +37,10 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-//                .formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
-//                .and()
-//                .logout().logoutUrl("/api/v1/auth/logout").logoutSuccessUrl("/").permitAll()
-//                .and()
+                .formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
+                .and()
+                .logout().logoutUrl("/api/v1/auth/logout").logoutSuccessUrl("/").permitAll()
+                .and()
                 // Add JWT token filter
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

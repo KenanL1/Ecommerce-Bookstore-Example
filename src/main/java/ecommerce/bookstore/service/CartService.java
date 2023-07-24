@@ -7,6 +7,8 @@ import ecommerce.bookstore.repository.BookRepository;
 import ecommerce.bookstore.repository.CartItemRepository;
 import ecommerce.bookstore.repository.CartRepository;
 import ecommerce.bookstore.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.List;
 @Transactional
 public class CartService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CartService.class);
     @Autowired
     CartRepository cartRepository;
     @Autowired
@@ -26,88 +29,117 @@ public class CartService {
     @Autowired
     UserRepository userRepository;
 
-
+    // Get user cart
     public Cart getCart(Long userId) {
-        Cart cart = cartRepository.getUserCart(userId);
-
-//        if (cart == null) {
-//            User user = userRepository.findById(userId).get();
-//            cart = cartRepository.save(new Cart(user, new ArrayList<CartItems>()));
-//        }
-        return cart;
+        try {
+            return cartRepository.getUserCart(userId);
+        } catch (Exception e) {
+            logger.error("Error getting cart", e);
+            throw e;
+        }
     }
 
+    // Add book to users cart
     public void addBookToCart(String bookId, Long userId) {
-        Book book = bookRepository.findById(bookId).get();
-        CartItems item = new CartItems(book, 1);
-        cartItemRepository.save(item);
-        Cart cart = getCart(userId);
+        try {
+            Book book = bookRepository.findById(bookId).get();
+            CartItems item = new CartItems(book, 1);
+            cartItemRepository.save(item);
+            Cart cart = getCart(userId);
 
-        cart.getCartList().add(item);
-        cartRepository.save(cart);
+            cart.getCartList().add(item);
+            cartRepository.save(cart);
+        } catch (Exception e) {
+            logger.error("Error adding book to cart", e);
+            throw e;
+        }
     }
 
+    // Check if a book is already in the users cart
     public boolean checkBookInCart(String bookId, Long userId) {
-        Cart cart = getCart(userId);
+        try {
+            Cart cart = getCart(userId);
 
-        if (cart != null) {
-            List<CartItems> cartList = cart.getCartList();
-            for (CartItems item : cartList) {
-                if (item.getBook().getBid().equals(bookId)) {
-                    return true;
+            if (cart != null) {
+                List<CartItems> cartList = cart.getCartList();
+                for (CartItems item : cartList) {
+                    if (item.getBook().getBid().equals(bookId)) {
+                        return true;
+                    }
                 }
             }
+            return false;
+        } catch (Exception e) {
+            logger.error("Error checking if book in cart", e);
+            throw e;
         }
-        return false;
     }
 
+    // Update the book quantity in users cart
     public void updateBookQuantity(String bookId, Long userId, int quantity) {
-        Cart cart = getCart(userId);
+        try {
+            Cart cart = getCart(userId);
 
-        if (cart != null) {
-            List<CartItems> cartList = cart.getCartList();
-            for (CartItems item : cartList) {
-                if (item.getBook().getBid().equals(bookId)) {
-                    item.setQuantity(quantity);
-                    cart.setCartList(cartList);
-                    cartItemRepository.save(item);
-                    cartRepository.save(cart);
-                    break;
+            if (cart != null) {
+                List<CartItems> cartList = cart.getCartList();
+                for (CartItems item : cartList) {
+                    if (item.getBook().getBid().equals(bookId)) {
+                        item.setQuantity(quantity);
+                        cart.setCartList(cartList);
+                        cartItemRepository.save(item);
+                        cartRepository.save(cart);
+                        break;
+                    }
                 }
             }
+        } catch (Exception e) {
+            logger.error("Error updating quantity", e);
+            throw e;
         }
     }
 
+    // Remove a book from the users cart
     public void removeBookFromCart(Long userId, String bookId) {
-        Cart cart = getCart(userId);
+        try {
+            Cart cart = getCart(userId);
 
-        if (cart != null) {
-//            Book book = cartItemRepository.findById(bookId).get();
-            List<CartItems> cartList = cart.getCartList();
-//            cartList.remove(book);
-            for (int i = 0; i < cartList.size(); i++) {
-                if (cartList.get(i).getBook().getBid().equals(bookId)) {
-                    CartItems item = cartList.get(i);
-                    cartList.remove(i);
-                    cartItemRepository.delete(item);
-                    break;
+            if (cart != null) {
+                //            Book book = cartItemRepository.findById(bookId).get();
+                List<CartItems> cartList = cart.getCartList();
+                //            cartList.remove(book);
+                for (int i = 0; i < cartList.size(); i++) {
+                    if (cartList.get(i).getBook().getBid().equals(bookId)) {
+                        CartItems item = cartList.get(i);
+                        cartList.remove(i);
+                        cartItemRepository.delete(item);
+                        break;
+                    }
                 }
+                cart.setCartList(cartList);
+                cartRepository.save(cart);
             }
-            cart.setCartList(cartList);
-            cartRepository.save(cart);
+        } catch (Exception e) {
+            logger.error("Error removing book from cart", e);
+            throw e;
         }
     }
 
+    // Clear all cart items
     public void clearCart(Long userId) {
-        Cart cart = getCart(userId);
+        try {
+            Cart cart = getCart(userId);
 
-        if (cart != null) {
-            List<CartItems> cartList = cart.getCartList();
-            cart.getCartList().clear();
-            for (CartItems item : cartList) {
-                cartItemRepository.delete(item);
+            if (cart != null) {
+                List<CartItems> cartList = cart.getCartList();
+                cart.getCartList().clear();
+                for (CartItems item : cartList) {
+                    cartItemRepository.delete(item);
+                }
+                cartRepository.save(cart);
             }
-            cartRepository.save(cart);
+        } catch (Exception e) {
+            logger.error("Error clearing cart", e);
+            throw e;
         }
     }
 }
