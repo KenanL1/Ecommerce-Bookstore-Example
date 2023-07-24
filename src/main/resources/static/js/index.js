@@ -1,18 +1,41 @@
 import {makeRequest} from './utils.js';
 
 // GET the books
-const displayBooks = async (category, title) => {
+const displayBooks = async (category, title, page, size, sortDir, sortBy) => {
 		try {
             var url = '../api/v1/book';
-		    if (category) {
-		        url += `?category=${category}`
-		    }
-		    if (title) {
-		        url += `?title=${title}`
-		    }
+		    // Array to store the parameters
+            var params = [];
+
+            // Add each parameter to the params array if it exists
+            if (category) {
+                params.push(`category=${category}`);
+            }
+            if (title) {
+                params.push(`title=${title}`);
+            }
+            if (page) {
+                params.push(`page=${page}`);
+            }
+            if (size) {
+                params.push(`size=${size}`);
+            }
+            if (sortDir) {
+                params.push(`sortDir=${sortDir}`);
+            }
+            if (sortBy) {
+                params.push(`sortBy=${sortBy}`);
+            }
+
+            // Concatenate the parameters with '&' as the separator and append them to the URL
+            if (params.length > 0) {
+                url += `?${params.join('&')}`;
+            }
 
             const data = await makeRequest(url, 'GET', null);
-            updateBooks(data);
+            lastPage = data.totalPages;
+            disablePagesBtn();
+            updateBooks(data.content);
 
         } catch(e) {
             console.log(e);
@@ -54,23 +77,63 @@ const updateBooks = (books) => {
         }
 	}
 };
-
+// Go to book item page
 const goToBookPage = (bid) => {
     window.location.href = "./book/" + bid;
 };
+// Disable/Enable pagination buttons
+const disablePagesBtn = () => {
+    if (currentPage === 0) {
+      prevBtn.classList.add('disabled');
+    } else {
+        prevBtn.classList.remove('disabled');
+    }
+    if (currentPage === lastPage - 1 || lastPage === 0) {
+        nextBtn.classList.add('disabled');
+    } else {
+        nextBtn.classList.remove('disabled');
+    }
+}
+// Search books by title
+const submitSearchForm = (e) => {
+    e.preventDefault();
+    currentPage = 0;
+    const searchText = document.getElementById("search").value;
+    displayBooks(currentCategory, searchText);
+}
 
 // get all radio buttons with the name category
 const categories = document.querySelectorAll('input[name="category"]');
-const searchButton = document.getElementById("searchSubmit");
+const searchForm = document.getElementById("searchForm");
+const searchSubmit = document.getElementById("searchSubmit");
+var currentCategory = "ALL";
+
+//Handle next and prev button clicks
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+var currentPage = 0;
+var lastPage;
+prevBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    const searchText = document.getElementById("search").value;
+    currentPage--;
+    displayBooks(currentCategory, searchText, currentPage);
+});
+nextBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    const searchText = document.getElementById("search").value;
+    currentPage++;
+    displayBooks(currentCategory, searchText, currentPage);
+});
 
 // Add onChange event listener to each radio button
 categories.forEach(category => {
   category.addEventListener('change', () => {
+    currentPage = 0;
     displayBooks(category.value);
+    currentCategory = category.value;
   });
 });
-searchButton.addEventListener('click', () => {
-    const searchText = document.getElementById("search").value;
-    displayBooks(null, searchText);
-  });
+searchForm.addEventListener('submit', (e) => submitSearchForm(e));
+searchSubmit.addEventListener('click', (e) => submitSearchForm(e))
 displayBooks();

@@ -49,8 +49,8 @@ class BookAPITest {
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/book")
                         .param("category", "FICTION"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray())
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].category").value(book.getCategory().toString()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isMap())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content[0].category").value(book.getCategory().toString()));
     }
 
     @Test
@@ -86,7 +86,7 @@ class BookAPITest {
 
         ResultActions resultActions = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/book"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isMap());
 
     }
 

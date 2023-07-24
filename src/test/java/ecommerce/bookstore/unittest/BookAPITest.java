@@ -4,12 +4,13 @@ import ecommerce.bookstore.entity.Book;
 import ecommerce.bookstore.enums.Category;
 import ecommerce.bookstore.restapi.BookAPI;
 import ecommerce.bookstore.service.BookService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -20,6 +21,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class BookAPITest {
 
     @Mock
@@ -30,6 +33,7 @@ class BookAPITest {
 
     private Book book;
     private List<Book> bookList;
+    private Page<Book> mockedPage;
 
     @BeforeEach
     void setUp() {
@@ -44,6 +48,9 @@ class BookAPITest {
 
         bookList = new ArrayList<>();
         bookList.add(book);
+
+        // Create a mock Page<Book> object with the reviews
+        mockedPage = new PageImpl<>(bookList);
     }
 
     @Test
@@ -51,12 +58,13 @@ class BookAPITest {
         String category = "FICTION";
         String title = null;
 
-        when(bookService.getBookByCategory(Category.FICTION)).thenReturn(bookList);
+        when(bookService.getBookByCategory(Category.FICTION, 0, 10, "desc", "bid"))
+                .thenReturn(mockedPage);
 
-        ResponseEntity<?> response = bookAPI.getBooks(category, title);
+        ResponseEntity<?> response = bookAPI.getBooks(category, title, 0, 10, "desc", "bid");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(bookList, response.getBody());
+        assertEquals(mockedPage, response.getBody());
     }
 
     @Test
@@ -64,9 +72,10 @@ class BookAPITest {
         String category = "INVALID";
         String title = null;
 
-        when(bookService.getBookByCategory(null)).thenThrow(new IllegalArgumentException("Invalid category"));
+        when(bookService.getBookByCategory(null, 0, 10, "desc", "bid"))
+                .thenThrow(new IllegalArgumentException("Invalid category"));
 
-        ResponseEntity<?> response = bookAPI.getBooks(category, title);
+        ResponseEntity<?> response = bookAPI.getBooks(category, title, 0, 10, "desc", "bid");
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Invalid category", response.getBody());
@@ -77,12 +86,13 @@ class BookAPITest {
         String category = null;
         String title = "Alchemist";
 
-        when(bookService.getBooksByTitle(title)).thenReturn(bookList);
+        when(bookService.getBooksByTitle(title, 0, 10, "desc", "bid"))
+                .thenReturn(mockedPage);
 
-        ResponseEntity<?> response = bookAPI.getBooks(category, title);
+        ResponseEntity<?> response = bookAPI.getBooks(category, title, 0, 10, "desc", "bid");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(bookList, response.getBody());
+        assertEquals(mockedPage, response.getBody());
     }
 
     @Test
@@ -90,12 +100,13 @@ class BookAPITest {
         String category = null;
         String title = null;
 
-        when(bookService.getAllBooks()).thenReturn(bookList);
+        when(bookService.getAllBooks(0, 10, "desc", "bid"))
+                .thenReturn(mockedPage);
 
-        ResponseEntity<?> response = bookAPI.getBooks(category, title);
+        ResponseEntity<?> response = bookAPI.getBooks(category, title, 0, 10, "desc", "bid");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(bookList, response.getBody());
+        assertEquals(mockedPage, response.getBody());
     }
 
     @Test
@@ -111,6 +122,7 @@ class BookAPITest {
     }
 
     @Test
+    @Order(1)
     void testBookAdd() {
         String bid = "B001";
         String title = "The Alchemist";

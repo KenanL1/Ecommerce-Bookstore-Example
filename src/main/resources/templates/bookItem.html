@@ -37,28 +37,42 @@
     </div>
     <br></br>
     <hr></hr>
-    <form>
-        <FIELDSET>
-            <legend>Reviews</legend>
-            <div id="reviews">
+    <FIELDSET>
+        <legend>Reviews</legend>
+        <form id="submitReview" th:attr="data-bookid=${book.bid}">
                 <textarea class="form-control" cols="50" id="reviewarea" placeholder="Enter Review"
                           rows="4"></textarea>
+            <div class="input-group mb-3">
                 <input class="form-control" id="ratingarea" placeholder="Enter Rating"></input>
-                <button class="btn btn-secondary float-right" id="submitReview" th:attr="data-bookid=${book.bid}"
-                        type="button">
-                    Submit
-                </button>
-
+                <button class="btn bg-success float-right" id="submitReviewBtn" type="button"> Submit</button>
             </div>
-            <label>Previous Reviews Section</label>
+        </form>
+        <h4>Previous Reviews Section</h4>
+        <div id="pagination">
+            <p>Total Pages: <span th:text="${totalPages}"></span> Total reviews: <span th:text="${totalReviews}"></span>
+            </p>
             <div class="card" th:each="review : ${reviews}">
                 <div class="container">
-                    <h4>Review: <b th:text="${review.review}"></b></h4>
-                    <h4>Rating: <b th:text="${review.rating}"></b> Stars</h4>
+                    <p>Review: <span th:text="${review.review}"></span></p>
+                    <p>Rating: <span th:text="${review.rating}"></span> &#9733;</p>
                 </div>
             </div>
-        </FIELDSET>
-    </form>
+            <!-- Pagination Buttons -->
+            <div class="d-flex justify-content-between mt-3">
+                <!-- Left Arrow Button -->
+                <a aria-label="Previous" class="btn bg-primary text-white" href="#" id="prevBtn">
+                    <span class="bi bi-arrow-left"></span> Previous
+                </a>
+
+                <!-- Right Arrow Button -->
+                <a aria-label="Next" class="btn bg-primary text-white" href="#" id="nextBtn"
+                   th:attr="data-last-page=${totalPages}">
+                    Next <span class="bi bi-arrow-right"></span>
+                </a>
+            </div>
+        </div>
+
+    </FIELDSET>
 </div>
 </body>
 </html>

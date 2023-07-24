@@ -1,23 +1,31 @@
 package ecommerce.bookstore.service;
 
 import ecommerce.bookstore.entity.Address;
+import ecommerce.bookstore.entity.Cart;
+import ecommerce.bookstore.entity.CartItems;
 import ecommerce.bookstore.entity.User;
 import ecommerce.bookstore.enums.Role;
 import ecommerce.bookstore.repository.AddressRepository;
+import ecommerce.bookstore.repository.CartRepository;
 import ecommerce.bookstore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private CartRepository cartRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -39,6 +47,7 @@ public class UserService {
     public User addUser(String name, String username, String password, String street, String province, String country, String zip) {
         Long addrId = addAddress(street, province, country, zip);
         User u = new User(name, username, addrId, passwordEncoder.encode(password), Role.USER);
+        cartRepository.save(new Cart(u, new ArrayList<CartItems>()));
         return userRepository.save(u);
     }
 

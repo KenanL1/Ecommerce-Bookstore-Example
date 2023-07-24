@@ -22,8 +22,12 @@ public class ReviewAPI {
     }
 
     @GetMapping("book/{bid}")
-    public ResponseEntity<List<Review>> getReviews(@PathVariable("bid") String bid) {
-        return ResponseEntity.ok(reviewService.getReviewsForBid(bid));
+    public ResponseEntity<List<Review>> getReviews(@PathVariable("bid") String bid,
+                                                   @RequestParam(value = "page", defaultValue = "0") int page,
+                                                   @RequestParam(value = "size", defaultValue = "10") int size,
+                                                   @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir,
+                                                   @RequestParam(value = "sortBy", defaultValue = "id") String sortBy) {
+        return ResponseEntity.ok(reviewService.getReviewsByBid(bid, page, size, sortDir, sortBy).getContent());
     }
 
     @DeleteMapping("/{id}")

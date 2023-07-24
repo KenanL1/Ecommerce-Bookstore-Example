@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -29,6 +31,7 @@ class ReviewAPITest {
 
     private Review review;
     private List<Review> reviewList;
+    private Page<Review> mockedPage;
 
     @BeforeEach
     void setUp() {
@@ -39,6 +42,9 @@ class ReviewAPITest {
         review.setRating(4);
         reviewList = new ArrayList<>();
         reviewList.add(review);
+
+        // Create a mock Page<Book> object with the reviews
+        mockedPage = new PageImpl<>(reviewList);
     }
 
     @Test
@@ -52,8 +58,9 @@ class ReviewAPITest {
     @Test
     void testGetReviews() {
         String bid = "B001";
-        when(reviewService.getReviewsForBid(bid)).thenReturn(reviewList);
-        ResponseEntity<List<Review>> response = reviewAPI.getReviews(bid);
+
+        when(reviewService.getReviewsByBid(bid, 0, 10, "desc", "id")).thenReturn(mockedPage);
+        ResponseEntity<List<Review>> response = reviewAPI.getReviews(bid, 0, 10, "desc", "id");
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(reviewList, response.getBody());
     }

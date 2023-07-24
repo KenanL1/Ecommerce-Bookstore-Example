@@ -26,6 +26,15 @@ INSERT INTO book (bid, title, price, category, author, picture_link) VALUES ('97
 INSERT INTO book (bid, title, price, category, author, picture_link) VALUES ('9780525656760','THE BEAUTY OF LIVING TWICE' ,25,'BIOGRAPHY', 'Sharon Stone','https://dynamic.indigoimages.ca/books/1338680455.jpg?width=200&quality=85&maxheight=200&sale=24&lang=en');
 
 INSERT INTO users(name, username, addr, password, role) VALUES('admin','admin',1, '$2a$10$zmxcZb4JLaLYbCLyBx0LlOWNUbfjAWG.gXyEA/vzuuR0GKImixXd.', 'USER');
+INSERT INTO cart (user_id)
+SELECT u.id
+FROM users u
+WHERE u.id = 1
+AND NOT EXISTS (
+    SELECT 1
+    FROM cart c
+    WHERE c.user_id = u.id
+);
 
 insert into review(bid, review, rating) values('9781524763169', 'Hello World', 5);
 insert into review(bid, review, rating) values('9780221076992', 'Hello World', 5);

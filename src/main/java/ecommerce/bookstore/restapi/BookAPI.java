@@ -21,23 +21,41 @@ public class BookAPI {
     // Get all books
     @GetMapping("")
     public ResponseEntity<?> getBooks(@RequestParam(required = false) String category,
-                                      @RequestParam(required = false) String title) {
+                                      @RequestParam(required = false) String title,
+                                      @RequestParam(value = "page", defaultValue = "0") int page,
+                                      @RequestParam(value = "size", defaultValue = "20") int size,
+                                      @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir,
+                                      @RequestParam(value = "sortBy", defaultValue = "bid") String sortBy) {
 
 
+        // Display books with the searched category
         if (category != null && !category.equalsIgnoreCase("ALL")) {
             try {
                 Category categoryEnum = Category.valueOf(category.toUpperCase());
-                return ResponseEntity.ok(bookService.getBookByCategory(categoryEnum));
+                if (title != null) {
+                    return ResponseEntity.ok(
+                            bookService.getBooksByCategoryAndTitle(categoryEnum, title, page, size, sortDir, sortBy)
+                    );
+                }
+                return ResponseEntity.ok(
+                        bookService.getBookByCategory(categoryEnum, page, size, sortDir, sortBy)
+                );
             } catch (IllegalArgumentException e) {
                 // Handle the case when an invalid category is provided
                 return ResponseEntity.badRequest().body("Invalid category");
             }
         }
 
+        // Display books with the searched title
         if (title != null)
-            return ResponseEntity.ok(bookService.getBooksByTitle(title));
+            return ResponseEntity.ok(
+                    bookService.getBooksByTitle(title, page, size, sortDir, sortBy)
+            );
 
-        return ResponseEntity.ok(bookService.getAllBooks());
+        // Display all books
+        return ResponseEntity.ok(
+                bookService.getAllBooks(page, size, sortDir, sortBy)
+        );
 
     }
 

@@ -3,18 +3,18 @@ package ecommerce.bookstore.service;
 import ecommerce.bookstore.entity.Book;
 import ecommerce.bookstore.entity.Cart;
 import ecommerce.bookstore.entity.CartItems;
-import ecommerce.bookstore.entity.User;
 import ecommerce.bookstore.repository.BookRepository;
 import ecommerce.bookstore.repository.CartItemRepository;
 import ecommerce.bookstore.repository.CartRepository;
 import ecommerce.bookstore.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class CartService {
 
     @Autowired
@@ -30,10 +30,10 @@ public class CartService {
     public Cart getCart(Long userId) {
         Cart cart = cartRepository.getUserCart(userId);
 
-        if (cart == null) {
-            User user = userRepository.findById(userId).get();
-            cart = cartRepository.save(new Cart(user, new ArrayList<CartItems>()));
-        }
+//        if (cart == null) {
+//            User user = userRepository.findById(userId).get();
+//            cart = cartRepository.save(new Cart(user, new ArrayList<CartItems>()));
+//        }
         return cart;
     }
 
