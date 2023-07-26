@@ -29,6 +29,7 @@ The application offers the following features:
 - Docker
 - JWT Authentication
 - JUnit 5 (Unit and Integration testing)
+- Selenium (UI Testing)
 
 ### Frontend (Thymeleaf Template Engine, Javascript)
 
