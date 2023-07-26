@@ -34,8 +34,9 @@ const getBooks = async () => {
     const handleQuantityChange = async (e, item) => {
         e.preventDefault();
         const totalPriceText = document.getElementById("totalPrice");
-        totalPrice = Number(totalPriceText.textContent) - item.totalPrice + (item.book.price * e.target.value);
+        totalPrice = Number(totalPriceText.textContent) - (item.totalPrice * item.quantity) + (item.book.price * e.target.value);
         const data = await makeRequest(`../api/v1/cart/updateQuantity`, 'POST', {userId, bookId: item.book.bid, quantity: e.target.value});
+        item.quantity = e.target.value;
         totalPriceText.textContent = totalPrice;
     }
 

@@ -39,8 +39,8 @@ public class SecurityConfig {
                 .and()
                 .formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
                 .and()
-                .logout().logoutUrl("/api/v1/auth/logout").logoutSuccessUrl("/").permitAll()
-                .and()
+//                .logout().logoutUrl("/api/v1/auth/logout").logoutSuccessUrl("/").permitAll()
+//                .and()
                 // Add JWT token filter
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

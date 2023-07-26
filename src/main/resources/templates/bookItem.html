@@ -51,7 +51,7 @@
         <div id="pagination">
             <p>Total Pages: <span th:text="${totalPages}"></span> Total reviews: <span th:text="${totalReviews}"></span>
             </p>
-            <div class="card" th:each="review : ${reviews}">
+            <div class="card book-review" th:each="review : ${reviews}">
                 <div class="container">
                     <p>Review: <span th:text="${review.review}"></span></p>
                     <p>Rating: <span th:text="${review.rating}"></span> &#9733;</p>
