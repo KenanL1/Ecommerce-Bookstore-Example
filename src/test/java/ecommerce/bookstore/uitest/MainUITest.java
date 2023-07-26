@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -28,8 +29,9 @@ public class MainUITest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         options.setBinary("C:/Program Files/Google/Chrome Dev/Application/chrome.exe");
-        // options.addArguments("--headless");  // Run in headless mode
+//        options.addArguments("--headless");  // Run in headless mode
         driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         // Maximize the browser window to make it fullscreen
         driver.manage().window().maximize();
     }
@@ -86,7 +88,7 @@ public class MainUITest {
         // Change categories: Find and click the radio button element using its attributes
         WebElement textbookCategory = driver.findElement(By.cssSelector("input.form-check-input[value='TEXTBOOK'][type='radio']"));
         textbookCategory.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("book")));
+        wait.until(ExpectedConditions.elementToBeSelected(textbookCategory));
         book = driver.findElement(By.className("book"));
         title = book.findElement(By.className("card-title"));
         assertEquals(title.getText(), "Java: A Beginners Guide, Eighth Edition", "Expected book title to be Java: A Beginners Guide, Eighth Edition");

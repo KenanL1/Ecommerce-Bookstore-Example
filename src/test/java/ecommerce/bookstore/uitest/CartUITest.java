@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,8 +30,9 @@ public class CartUITest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         options.setBinary("C:/Program Files/Google/Chrome Dev/Application/chrome.exe");
-        // options.addArguments("--headless");  // Run in headless mode
+//        options.addArguments("--headless");  // Run in headless mode
         driver = new ChromeDriver(options);
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         // Maximize the browser window to make it fullscreen
         driver.manage().window().maximize();
 
@@ -51,7 +53,7 @@ public class CartUITest {
         driver.get("http://localhost:8080");
         WebElement logoutBtn = driver.findElement(By.id("logoutButton"));
         logoutBtn.click();
-//        driver.quit();
+        driver.quit();
     }
 
     @Test
