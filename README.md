@@ -29,7 +29,8 @@ The application offers the following features:
 - Docker
 - JWT Authentication
 - JUnit 5 (Unit and Integration testing)
-- Selenium (UI Testing)
+- Selenium (End-to-end UI Testing)
+- Github Actions
 
 ### Frontend (Thymeleaf Template Engine, Javascript)
 
@@ -173,7 +174,26 @@ Benefits of using MockMvc for integration testing:
 By leveraging JUnit 5, Mockito, and MockMvc, this project benefits from a robust testing framework, isolated unit tests,
 comprehensive integration testing, and improved test organization.
 
-Please refer to the relevant documentation for more details on implementing testing with JUnit 5, Mockito, and MockMvc.
+### Continuous Integration & Continuous Deployment With Github Actions
+
+This project utilizes Github actions for continuous integration and deployment
+
+#### Benefits of Github Actions
+
+- **Streamlined Workflow Automation**: GitHub Actions allows you to automate a wide range of development and deployment
+  tasks, reducing manual intervention and human errors.
+- **Extensive Ecosystem**: GitHub Actions benefits from an active community that contributes workflow templates and
+  reusable actions through the GitHub Marketplace, saving development time and promoting best practices.
+- **Automated Testing with Surefire Reports**: GitHub Actions can run automated tests using tools like Surefire,
+  generating
+  detailed test reports that provide insights into test coverage, pass rates, and potential issues.
+  **Deployment to Google Cloud Run**: GitHub Actions can seamlessly deploy containerized applications to Google Cloud
+  Run,
+  leveraging its auto-scaling and serverless capabilities for efficient and cost-effective deployments.
+
+By leveraging the benefits of GitHub Actions, along with automated testing using tools like Surefire and deployment to
+Google Cloud Run, development teams can establish a streamlined and automated CI/CD pipeline that enhances productivity,
+reduces errors, and accelerates the delivery of reliable software.
 
 ### Setting Up Postgres DB with Docker Separately
 
